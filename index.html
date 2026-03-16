@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Convite de 15 Anos - Yasmin Medeiros</title>
+    
+    <!-- Fontes Aristocráticas e Clássicas -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Cormorant+Garamond:ital,wght@0,300;0,600;1,400&family=Pinyon+Script&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --off-white: #FCFAEF;
+            --champagne: #F2E8D5;
+            --gold-main: #D4AF37;
+            --gold-dark: #997A00;
+            --gold-bright: #FFF6BA;
+            --text-dark: #3A352A;
+            --text-light: #6B6254;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body, html {
+            width: 100%; height: 100%;
+            overflow: hidden;
+            background-color: var(--off-white);
+            font-family: 'Cormorant Garamond', serif;
+            color: var(--text-dark);
+        }
+
+        /* Textura de papel nobre */
+        .paper-texture {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: radial-gradient(circle at center, var(--off-white) 0%, var(--champagne) 100%);
+            z-index: -2;
+            pointer-events: none;
+        }
+
+        /* =========================================
+           ENVELOPE (TELA INICIAL)
+           ========================================= */
+         #cover-screen {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            display: flex; flex-direction: column; justify-content: center; align-items: center;
+            background: radial-gradient(circle at center, #ffffff, var(--off-white));
+            z-index: 1000;
+            transition: all 1.5s cubic-bezier(0.7, 0, 0.3, 1);
+        }
+
+        /* Sinete com o Y dentro de um círculo */
+        .wax-seal {
+            width: 140px; height: 140px;
+            background: radial-gradient(circle at 30% 30%, #E6C27A, #D4AF37, #8B6508);
+            border-radius: 50%;
+            display: flex; justify-content: center; align-items: center;
+            box-shadow: 0 20px 40px rgba(139, 101, 8, 0.5), inset 0 0 15px rgba(255,255,255,0.4);
+            cursor: pointer;
+            position: relative;
+            z-index: 10;
+        }
+
+        /* O círculo interno em volta do Y */
+        .wax-seal::before {
+            content: '';
+            position: absolute;
+            width: 100px; height: 100px;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+            box-shadow: inset 0 0 10px rgba(0,0,0,0.2);
+        }
+
+        .wax-seal-letter {
+            font-family: 'Pinyon Script', cursive;
+            font-size: 75px; color: #FAF5E9;
+            text-shadow: 1px 2px 4px rgba(0,0,0,0.3);
+            z-index: 2;
+        }
+
+        .tap-text {
+            margin-top: 35px;
+            font-family: 'Cinzel', serif;
+            letter-spacing: 5px;
+            color: var(--gold-dark);
+            text-transform: uppercase;
+            font-size: 14px;
+            animation: fade-pulse 2s infinite;
+        }
+
+        /* =========================================
+           CONVITE (CARD)
+           ========================================= */
+        #invitation-screen {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            display: flex; justify-content: center; align-items: center;
+            padding: 20px;
+            opacity: 0;
+            transform: scale(0.95);
+            transition: all 1.5s ease;
+            z-index: 500;
+            overflow-y: auto;
+        }
+
+        #invitation-screen.active { opacity: 1; transform: scale(1); }
+
+        .card {
+            background-color: rgba(255, 254, 250, 0.5);
+            width: 100%; max-width: 600px;
+            min-height: 85vh;
+            border-radius: 4px;
+            box-shadow: 0 40px 80px rgba(0,0,0,0.15);
+            position: relative;
+            padding: 50px 30px;
+            display: flex; flex-direction: column; align-items: center; text-align: center;
+            backdrop-filter: blur(12px);
+            margin: auto;
+            border: 1px solid rgba(212, 175, 55, 0.3);
+        }
+
+        /* Moldura Real Tripla */
+        .card-frame {
+            position: absolute;
+            top: 20px; left: 20px; right: 20px; bottom: 20px;
+            border: 1px solid rgba(212, 175, 55, 0.5);
+            pointer-events: none;
+        }
+        .card-frame::before {
+            content: ''; position: absolute;
+            top: 6px; left: 6px; right: 6px; bottom: 6px;
+            border: 1px solid rgba(212, 175, 55, 0.2);
+        }
+        .card-frame::after {
+            content: ''; position: absolute;
+            top: -10px; left: -10px; right: -10px; bottom: -10px;
+            border: 1px solid rgba(212, 175, 55, 0.1);
+        }
+
+        /* Cantos Geométricos de Luxo */
+        .gold-corner {
+            position: absolute;
+            width: 130px; height: 130px;
+            pointer-events: none; z-index: 2;
+        }
+        .top-left { top: 0; left: 0; }
+        .top-right { top: 0; right: 0; transform: scaleX(-1); }
+        .bottom-left { bottom: 0; left: 0; transform: scaleY(-1); }
+        .bottom-right { bottom: 0; right: 0; transform: scale(-1, -1); }
+
+        /* Estrela de 4 pontas (Diamond Sparkle) */
+        .star-4 {
+            position: absolute;
+            background: var(--gold-main);
+            clip-path: polygon(50% 0%, 55% 45%, 100% 50%, 55% 55%, 50% 100%, 45% 55%, 0% 50%, 45% 45%);
+            z-index: 3;
+            pointer-events: none;
+        }
+
+        .title-xv {
+            font-family: 'Cinzel', serif;
+            font-size: 28px; letter-spacing: 12px;
+            color: var(--gold-main);
+            margin-top: 25px; margin-bottom: 10px;
+        }
+
+        .main-name {
+            font-family: 'Pinyon Script', cursive;
+            font-size: 78px; 
+            font-weight: 300;
+            color: var(--gold-main);
+            margin-bottom: 25px;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.05);
+            line-height: 1.1;
+        }
+
+        .poetic-message {
+            font-size: 18px; line-height: 1.6;
+            max-width: 85%; margin-bottom: 30px;
+            color: var(--text-dark);
+        }
+
+        .fixed-date {
+            font-family: 'Cinzel', serif;
+            font-size: 24px; letter-spacing: 6px;
+            color: var(--gold-dark);
+            margin-bottom: 30px;
+            padding: 12px 0;
+            border-top: 1px solid rgba(212, 175, 55, 0.3);
+            border-bottom: 1px solid rgba(212, 175, 55, 0.3);
+            width: 85%;
+        }
+
+        .editable-section {
+            width: 85%; display: flex; flex-direction: column; gap: 15px;
+            margin-bottom: 40px;
+        }
+
+        .input-elegant {
+            background: transparent; border: none;
+            border-bottom: 1px dashed rgba(212, 175, 55, 0.5);
+            text-align: center; font-size: 19px;
+            color: var(--text-dark); padding: 8px;
+            outline: none; font-family: 'Cormorant Garamond', serif;
+        }
+
+        .rsvp-button {
+            background: var(--gold-main);
+            color: #fff; padding: 18px 50px;
+            font-family: 'Cinzel', serif;
+            border-radius: 50px; text-decoration: none;
+            text-transform: uppercase; letter-spacing: 3px;
+            box-shadow: 0 12px 30px rgba(212, 175, 55, 0.4);
+            transition: 0.3s;
+        }
+
+        .rsvp-button:hover { transform: translateY(-4px); background: var(--gold-dark); }
+
+        /* =========================================
+           FUNDO MÁGICO (ARABESCOS E GLITER)
+           ========================================= */
+        #magic-bg {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            pointer-events: none; z-index: 5;
+            overflow: hidden; opacity: 0;
+            transition: opacity 2s ease;
+        }
+
+        .glitter {
+            position: absolute; border-radius: 50%;
+            background: white; box-shadow: 0 0 10px var(--gold-bright);
+            animation: glitterMove linear infinite;
+        }
+
+        .arabesque-svg {
+            position: absolute; opacity: 0.4;
+            animation: arabesqueFloat linear infinite;
+        }
+
+        @keyframes glitterMove {
+            0% { transform: translateY(110vh) scale(0); opacity: 0; }
+            20% { opacity: 1; }
+            80% { opacity: 1; }
+            100% { transform: translateY(-10vh) scale(1.5); opacity: 0; }
+        }
+
+        @keyframes starTwinkle {
+            0%, 100% { transform: scale(0.6) rotate(0deg); opacity: 0.4; }
+            50% { transform: scale(1.2) rotate(45deg); opacity: 1; }
+        }
+
+        @keyframes arabesqueFloat {
+            0% { transform: translateY(110vh) rotate(0deg); opacity: 0; }
+            20% { opacity: 0.4; }
+            100% { transform: translateY(-20vh) rotate(90deg); opacity: 0; }
+        }
+
+        @keyframes seal-glow {
+            from { box-shadow: 0 10px 25px rgba(139, 101, 8, 0.3); }
+            to { box-shadow: 0 15px 45px rgba(212, 175, 55, 0.7), 0 0 20px rgba(212, 175, 55, 0.4); }
+        }
+
+        @keyframes fade-pulse { 0%, 100% { opacity: 0.4; } 50% { opacity: 1; } }
+
+        /* Música */
+        #music-btn {
+            position: fixed; top: 25px; right: 25px;
+            width: 50px; height: 50px;
+            border-radius: 50%; background: rgba(255, 254, 250, 0.8);
+            border: 1px solid var(--gold-main);
+            display: none; justify-content: center; align-items: center;
+            cursor: pointer; z-index: 2000; color: var(--gold-dark);
+            font-size: 24px; box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .developer-credit {
+            font-family: 'Cinzel', serif;
+            font-size: 9px; letter-spacing: 2px;
+            color: var(--gold-dark); opacity: 0.6;
+            margin-top: 25px; text-transform: uppercase;
+        }
+
+        @media (max-width: 600px) {
+            .main-name { font-size: 58px; }
+            .card { padding: 40px 15px; min-height: 82vh; }
+        }
+    </style>
+</head>
+<body>
+
+    <audio id="bg-music" loop>
+        <source src="wildest_dreams_violino.mp3.mp3" type="audio/mpeg">
+    </audio>
+
+    <div id="music-btn" onclick="toggleMusic()">♪</div>
+
+    <div class="paper-texture"></div>
+    <div id="magic-bg"></div>
+
+    <!-- ENVELOPE -->
+    <div id="cover-screen">
+        <!-- Gliter no envelope -->
+        <div id="cover-glitter"></div>
+        <div class="wax-seal" onclick="openInvitation()">
+            <span class="wax-seal-letter">Y</span>
+        </div>
+        <div class="tap-text">Toque para abrir</div>
+    </div>
+
+    <!-- CONVITE -->
+    <div id="invitation-screen">
+        <div class="card">
+            <div class="card-frame"></div>
+            
+            <svg width="0" height="0" style="position:absolute">
+                <defs>
+                    <g id="aristocratic-corner">
+                        <path d="M 15,120 L 15,15 L 120,15" fill="none" stroke="#D4AF37" stroke-width="2"/>
+                        <path d="M 25,100 L 25,25 L 100,25" fill="none" stroke="#D4AF37" stroke-width="0.8" stroke-dasharray="3 3"/>
+                        <circle cx="15" cy="15" r="4" fill="#D4AF37"/>
+                    </g>
+                </defs>
+            </svg>
+
+            <svg class="gold-corner top-left" viewBox="0 0 150 150"><use href="#aristocratic-corner"/></svg>
+            <svg class="gold-corner top-right" viewBox="0 0 150 150"><use href="#aristocratic-corner"/></svg>
+            <svg class="gold-corner bottom-left" viewBox="0 0 150 150"><use href="#aristocratic-corner"/></svg>
+            <svg class="gold-corner bottom-right" viewBox="0 0 150 150"><use href="#aristocratic-corner"/></svg>
+
+            <!-- Estrelas de 4 pontas cintilando no cartão -->
+            <div class="star-4" style="top: 10%; left: 10%; width: 22px; height: 22px; animation: starTwinkle 3s infinite;"></div>
+            <div class="star-4" style="top: 25%; right: 12%; width: 18px; height: 18px; animation: starTwinkle 4s infinite 1s;"></div>
+            <div class="star-4" style="bottom: 18%; left: 8%; width: 20px; height: 20px; animation: starTwinkle 3.5s infinite 0.5s;"></div>
+            <div class="star-4" style="bottom: 12%; right: 15%; width: 24px; height: 24px; animation: starTwinkle 4.5s infinite 2s;"></div>
+
+            <div style="font-family: 'Pinyon Script', cursive; font-size: 42px; color: var(--gold-main); margin-bottom: 5px;">Y</div>
+            <h1 class="title-xv">XV ANOS</h1>
+            <p style="font-style: italic; color: var(--text-light); margin-bottom: 5px;">A doce celebração de</p>
+            <h2 class="main-name">Yasmin Medeiros</h2>
+            
+            <p class="poetic-message">
+                Há momentos na vida que merecem ser eternizados e compartilhados com as pessoas que mais amamos. Com gratidão, convido você para este novo capítulo.
+            </p>
+
+            <div class="fixed-date">23 . MAIO . 2026</div>
+
+            <div class="editable-section">
+                <input type="text" class="input-elegant" placeholder="Horário (ex: 20:00h)">
+                <input type="text" class="input-elegant" placeholder="Local da Recepção">
+                <input type="text" class="input-elegant" placeholder="Endereço Completo">
+            </div>
+
+            <a href="https://wa.me/5500000000000" target="_blank" class="rsvp-button">Confirmar Presença</a>
+            
+            <div class="developer-credit">Desenvolvido por Caroline Medeiros</div>
+        </div>
+    </div>
+
+    <script>
+        // Gerar gliter inicial no envelope
+        const coverGlitter = document.getElementById('cover-glitter');
+        for(let i=0; i<25; i++) {
+            const s = document.createElement('div');
+            s.className = 'star-4';
+            s.style.left = Math.random() * 100 + 'vw';
+            s.style.top = Math.random() * 100 + 'vh';
+            s.style.width = (Math.random() * 18 + 6) + 'px';
+            s.style.height = s.style.width;
+            s.style.opacity = Math.random();
+            s.style.animation = `starTwinkle ${Math.random()*2 + 2}s infinite`;
+            coverGlitter.appendChild(s);
+        }
+
+        function openInvitation() {
+            const music = document.getElementById('bg-music');
+            music.volume = 0.5;
+            music.play().catch(() => {});
+            
+            document.getElementById('music-btn').style.display = 'flex';
+            
+            const cover = document.getElementById('cover-screen');
+            cover.style.opacity = '0';
+            cover.style.transform = 'translateY(-100%)';
+            cover.style.pointerEvents = 'none';
+
+            setTimeout(() => {
+                document.getElementById('invitation-screen').classList.add('active');
+                document.getElementById('magic-bg').style.opacity = '1';
+                startMagic();
+            }, 600);
+        }
+
+        function startMagic() {
+            const container = document.getElementById('magic-bg');
+            
+            // Criar gliter e estrelas de 4 pontas voando
+            setInterval(() => createParticle(container, 'glitter'), 120);
+            setInterval(() => createParticle(container, 'star-4-flying'), 350);
+            setInterval(() => createArabesque(container), 2200);
+        }
+
+        function createParticle(container, type) {
+            const p = document.createElement('div');
+            p.className = type === 'glitter' ? 'glitter' : 'star-4';
+            
+            const size = type === 'glitter' ? Math.random() * 4 + 2 : Math.random() * 14 + 8;
+            p.style.width = size + 'px';
+            p.style.height = size + 'px';
+            p.style.left = Math.random() * 100 + 'vw';
+            
+            const duration = Math.random() * 10 + 10;
+            p.style.animation = type === 'glitter' 
+                ? `glitterMove ${duration}s linear infinite` 
+                : `glitterMove ${duration}s linear infinite, starTwinkle 2.5s infinite`;
+            
+            container.appendChild(p);
+            setTimeout(() => p.remove(), duration * 1000);
+        }
+
+        function createArabesque(container) {
+            const div = document.createElement('div');
+            div.className = 'arabesque-svg';
+            div.innerHTML = `
+                <svg viewBox="0 0 100 100" width="130" height="130" fill="none" stroke="rgba(212, 175, 55, 0.4)" stroke-width="1">
+                    <path d="M 20 80 C 10 50 30 20 50 20 C 70 20 90 50 80 80 C 70 110 40 90 50 70 C 60 50 80 60 70 80" />
+                    <circle cx="50" cy="20" r="2.5" fill="rgba(212, 175, 55, 0.3)"/>
+                </svg>
+            `;
+            div.style.left = Math.random() * 100 + 'vw';
+            const duration = Math.random() * 18 + 15;
+            div.style.animationDuration = duration + 's';
+            container.appendChild(div);
+            setTimeout(() => div.remove(), duration * 1000);
+        }
+
+        function toggleMusic() {
+            const music = document.getElementById('bg-music');
+            music.paused ? music.play() : music.pause();
+        }
+    </script>
+</body>
+</html>
