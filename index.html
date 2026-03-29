@@ -23,6 +23,10 @@
 
         * { box-sizing: border-box; margin: 0; padding: 0; }
 
+        /* Oculta a barra de rolagem visualmente, mas mantém a rolagem por toque/mouse funcionando */
+        ::-webkit-scrollbar { display: none; }
+        * { -ms-overflow-style: none; scrollbar-width: none; }
+
         body, html {
             width: 100%; height: 100%;
             overflow: hidden;
@@ -94,8 +98,8 @@
         #invitation-screen {
             position: absolute;
             top: 0; left: 0; width: 100%; height: 100%;
-            display: flex; justify-content: center; align-items: center;
-            padding: 20px;
+            display: flex; justify-content: center; align-items: flex-start; /* Permite ver o papel desde o topo sem cortar */
+            padding: 40px 20px;
             opacity: 0;
             transform: scale(0.95);
             transition: all 1.5s ease;
@@ -335,10 +339,20 @@
         }
 
         .developer-credit {
-            font-family: 'Cinzel', serif;
-            font-size: 9px; letter-spacing: 2px;
-            color: var(--gold-dark); opacity: 0.6;
-            margin-top: 25px; text-transform: uppercase;
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 16px; 
+            font-style: italic;
+            color: var(--text-dark); /* Escurecido para melhor leitura */
+            opacity: 0.9;
+            margin-top: 30px; 
+        }
+        
+        .developer-name {
+            font-family: 'Pinyon Script', cursive;
+            font-size: 18px; /* Tamanho reduzido novamente para ficar bem delicado */
+            color: var(--gold-dark);
+            margin-left: 5px;
+            font-style: normal;
         }
 
         @media (max-width: 600px) {
@@ -428,7 +442,7 @@
             
             <div class="action-buttons">
                 <a href="https://maps.app.goo.gl/yHjuTppUPEcWnnmHA" class="action-btn" target="_blank">Local da Festa</a>
-                <a href="https://wa.me/5500000000000" class="action-btn" target="_blank">Confirmar Presença</a>
+                <a href="https://docs.google.com/forms/d/e/1FAIpQLSf8OXzq0FXxcXaWuel4KJnm-UlY-nY3jhEuX4LSGOUItCYsPg/viewform?usp=publish-editor" class="action-btn" target="_blank">Confirmar Presença</a>
                 <button class="action-btn" onclick="openModal('modal-sugestoes')">Sugestão de Presente</button>
                 <button class="action-btn" onclick="openModal('modal-pix')">Pix para me presentear</button>
             </div>
@@ -484,7 +498,7 @@
                 </p>
             </div>
             
-            <div class="developer-credit">Desenvolvido por Caroline Medeiros</div>
+            <div class="developer-credit">Desenvolvido por <span class="developer-name">Caroline Medeiros</span></div>
         </div>
     </div>
 
@@ -496,7 +510,6 @@
     <div id="modal-sugestoes" class="modal-overlay">
         <div class="modal-stars" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 1;"></div>
         <div class="modal-content" style="position: relative; z-index: 2;">
-            <button class="close-btn" onclick="closeModal('modal-sugestoes')">×</button>
             <h3 class="manual-title">Sugestão de Presente</h3>
             
             <div style="text-align: left; display: inline-block; margin-top: 10px;">
@@ -508,6 +521,13 @@
                 <p class="manual-item"><span class="manual-icon">✦</span> Produtos de Skin Care</p>
                 <p class="manual-item"><span class="manual-icon">✦</span> Produtos de Cabelo</p>
                 <p class="manual-item"><span class="manual-icon">✦</span> Maquiagens</p>
+                
+                <p style="font-family: 'Cormorant Garamond', serif; font-size: 19px; font-style: italic; color: var(--text-light); margin-top: 25px; line-height: 1.4; text-align: center;">
+                    "Estas são apenas algumas ideias, mas fique totalmente à vontade para escolher outras coisas, caso prefira!"
+                </p>
+                
+                <!-- Botão Voltar (Sugestões) -->
+                <button class="action-btn" style="width: 100%; max-width: 200px; margin: 30px auto 0; display: block;" onclick="closeModal('modal-sugestoes')">Voltar</button>
             </div>
         </div>
     </div>
@@ -516,7 +536,6 @@
     <div id="modal-pix" class="modal-overlay">
         <div class="modal-stars" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 1;"></div>
         <div class="modal-content" style="position: relative; z-index: 2;">
-            <button class="close-btn" onclick="closeModal('modal-pix')">×</button>
             <h3 class="manual-title">Pix para Presentear</h3>
             
             <p class="poetic-message" style="margin: 0 auto 15px;">Se desejar presentear-me via Pix, utilize a chave abaixo:</p>
@@ -536,6 +555,9 @@
             </div>
             
             <button class="action-btn" style="width: 100%; max-width: 250px; margin: 0 auto; display: block;" onclick="copyPix()">Copiar Chave PIX</button>
+            
+            <!-- Botão Voltar (Pix) -->
+            <button class="action-btn" style="width: 100%; max-width: 250px; margin: 15px auto 0; display: block;" onclick="closeModal('modal-pix')">Voltar</button>
         </div>
     </div>
 
